@@ -199,8 +199,9 @@ It tracks:
 * Slack: Human escalation and operational alerts
 * JSON: Workflow export, sample test data and target schema
 
-## Repository Structure
+# Repository Structure
 
+```
 delivery_orchestration_engine/
 ├── sample_data/
 │   ├── invalid_order.json
@@ -229,9 +230,10 @@ delivery_orchestration_engine/
 │   └── delivery-orchestration-workflow.json
 ├── .gitignore
 ├── README.md
-└── test_results.md
+└── test_results.md 
+```
 
-## Running the Proof of Concept
+# Running the Proof of Concept
 
 1. Import the workflow
 
@@ -277,7 +279,7 @@ Check:
 * Slack escalation output
 * The final order status and exception reason
 
-## Security
+# Security
 
 The public workflow export has been sanitised for GitHub.
 
@@ -294,7 +296,7 @@ The repository does not contain:
 
 Placeholder identifiers must be replaced after importing the workflow into another n8n environment.
 
-## Design Decisions
+# Design Decisions
 
 Deterministic operational rules
 
@@ -312,7 +314,7 @@ Human-in-the-loop recovery
 
 Slack escalation preserves human oversight for exceptions that could affect customers, delivery commitments or operational cost.
 
-## POC Limitations
+# POC Limitations
 
 * Provider responses are simulated for controlled testing.
 * Provider availability is represented by a predefined test pool.
@@ -320,7 +322,7 @@ Slack escalation preserves human oversight for exceptions that could affect cust
 * The timeout event is simulated rather than waiting 30 minutes during QA.
 * Live carrier quotation, tracking and booking APIs are outside the current scope.
 
-## Production Enhancements
+# Production Enhancements
 
 A production version could include:
 
@@ -337,7 +339,7 @@ A production version could include:
 * Monitoring, alerting and execution logs
 * Automated regression testing
 
-## Business Value
+# Business Value
 
 This proof of concept shows how delivery orchestration can reduce repetitive dispatch work while improving operational consistency.
 
@@ -353,6 +355,7 @@ The system provides:
 * A structured foundation for cost, reliability and delivery-time optimisation
 
 
-## Author
+# Author
 Frances Ehinor
+
 francesbuilds.com

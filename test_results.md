@@ -1,28 +1,58 @@
-### Test Results
+# Test Results
 
-## Test Scope
+# Test Scope
 
 The Delivery Orchestration Engine was tested using six controlled scenarios covering order validation, provider assignment, provider failure and human escalation.
 
 Provider responses were simulated to verify that each workflow branch reached the expected operational outcome.
 
-## Test Summary
+# Test Summary
 
-Test	Scenario	Expected Result	Actual Result	Status
-T01	Invalid delivery address	Stop operational processing and request human review	Order was marked Needs Attention and escalated to Slack for manual review	Pass
-T02	Unsupported refrigerated vehicle	Stop provider assignment when no provider supports the required vehicle	No eligible provider was selected and the order was escalated to Slack	Pass
-T03	Primary provider accepts	Assign the selected provider and continue order processing	Provider was assigned and the order continued through the successful processing path	Pass
-T04	Primary provider cancels	Record the cancellation and evaluate fallback recovery	Cancellation after acceptance was recorded and the exception path was triggered	Pass
-T05	Primary provider rejects	Record the rejection and evaluate remaining providers	Rejection was recorded; no remaining eligible provider was available, so the order was escalated	Pass
-T06	Primary provider times out	Record the timeout and evaluate remaining providers	The 30-minute timeout was recorded; no remaining eligible provider was available, so the order was escalated	Pass
 
-## Detailed Results
+### T01 Invalid Delivery Address
 
-#  T01  Invalid Delivery Address
+- **Expected:** Stop operational processing and request human review.
+- **Actual:** The order was marked `Needs Attention` and escalated to Slack.
+- **Status:** Pass
+
+### T02  Unsupported Refrigerated Vehicle
+
+- **Expected:** Stop provider assignment when no provider supports the required vehicle.
+- **Actual:** No eligible provider was selected, and the order was escalated to Slack.
+- **Status:** Pass
+
+### T03  Primary Provider Accepts
+
+- **Expected:** Assign the selected provider and continue processing.
+- **Actual:** The provider was assigned, and the order continued through the successful path.
+- **Status:** Pass
+
+### T04  Primary Provider Cancels
+
+- **Expected:** Record the cancellation and evaluate fallback availability.
+- **Actual:** Cancellation after acceptance was recorded, and the exception path was triggered.
+- **Status:** Pass
+
+### T05  Primary Provider Rejects
+
+- **Expected:** Record the rejection and evaluate the remaining providers.
+- **Actual:** The rejection was recorded. No remaining eligible provider was available, so the order was escalated.
+- **Status:** Pass
+
+### T06  Primary Provider Times Out
+
+- **Expected:** Record the timeout and evaluate the remaining providers.
+- **Actual:** The 30-minute timeout was recorded. No remaining eligible provider was available, so the order was escalated.
+- **Status:** Pass
+
+
+# Detailed Results
+
+##  T01  Invalid Delivery Address
 
 Input: An order with a delivery address that could not be validated.
 
-# Result:
+### Result:
 
 * Validation failed before provider assignment.
 * The order was marked Needs Attention.
@@ -31,11 +61,11 @@ Input: An order with a delivery address that could not be validated.
 
 Evidence: [Invalid Order Validation](screenshots/02-invalid-order-validation.png)
 
-# T02  Unsupported Refrigerated Vehicle
+## T02  Unsupported Refrigerated Vehicle
 
 Input: An order requiring a refrigerated van when no eligible provider supported that vehicle type.
 
-# Result:
+### Result:
 
 * The order passed initial field validation.
 * Provider eligibility checks rejected the available providers.
@@ -44,11 +74,11 @@ Input: An order requiring a refrigerated van when no eligible provider supported
 
 Evidence: [No Eligible Provider](screenshots/07-no-eligible-provider.png)
 
-# T03  Primary Provider Accepts
+## T03  Primary Provider Accepts
 
 Input: A valid standard delivery with the simulated provider response set to accept.
 
-# Result:
+### Result:
 
 * An eligible provider was selected.
 * The provider accepted the delivery request.
@@ -60,11 +90,11 @@ Evidence:
 * [Initial Provider Accepts](screenshots/03-initial-provider-accepts.png)
 * [Customer Email Update](screenshots/08-customer-email-update.png)
 
-# T04  Primary Provider Cancels
+## T04  Primary Provider Cancels
 
 Input: A valid delivery with the simulated response set to cancel_after_acceptance.
 
-# Result:
+### Result:
 
 * The primary provider initially accepted the request.
 * A cancellation after three minutes was recorded.
@@ -73,11 +103,11 @@ Input: A valid delivery with the simulated response set to cancel_after_acceptan
 
 Evidence: [Initial Provider Cancels](screenshots/05-initial-provider-cancel.png)
 
-# T05  Primary Provider Rejects
+## T05  Primary Provider Rejects
 
 Input: A valid delivery with the simulated provider response set to reject.
 
-# Result:
+### Result:
 
 * The primary provider declined the delivery request.
 * The rejection reason was recorded.
@@ -86,11 +116,11 @@ Input: A valid delivery with the simulated provider response set to reject.
 
 Evidence: [Initial Provider Rejects](screenshots/04-initial-provider-rejects.png)
 
-# T06  Primary Provider Times Out
+## T06  Primary Provider Times Out
 
 Input: A valid delivery with the simulated provider response set to timeout.
 
-# Result:
+### Result:
 
 * The provider did not respond within the configured 30-minute window.
 * The timeout was recorded as the primary failure reason.
@@ -102,7 +132,7 @@ Evidence:
 * [Initial Provider Timeout](screenshots/06-initial-provider-timeout.png)
 * [Slack No Provider Escalation](screenshots/11-slack-no-provider-escalation.png)
 
-## Data Persistence Validation
+# Data Persistence Validation
 
 Google Sheets append-and-update behaviour was also verified:
 
@@ -110,7 +140,7 @@ Google Sheets append-and-update behaviour was also verified:
 * Reusing the same external order ID updated the existing row.
 * A duplicate order row was not created.
 
-# Notification Validation
+## Notification Validation
 
 The workflow successfully produced:
 
@@ -134,6 +164,6 @@ The POC demonstrates:
 * Customer communication
 * Human escalation through Slack
 
-## POC Limitations
+# POC Limitations
 
 Provider responses are simulated for controlled testing. Google Sheets is used as the POC operational datastore. A production implementation would use live provider APIs, secure environment-specific credentials, retry controls and a production database or transport-management platform.
