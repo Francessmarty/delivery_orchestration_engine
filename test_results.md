@@ -1,4 +1,4 @@
-# Test Results
+### Test Results
 
 # Test Scope
 
@@ -59,7 +59,7 @@ Input: An order with a delivery address that could not be validated.
 * A Slack notification requested manual review.
 * Invalid data did not continue through normal dispatch processing.
 
-Evidence: [Invalid Order Validation](screenshots/02-invalid-order-validation.png)
+Evidence: ![Invalid Order Validation](screenshots/02-invalid-order-validation.png)
 
 ## T02  Unsupported Refrigerated Vehicle
 
@@ -72,7 +72,7 @@ Input: An order requiring a refrigerated van when no eligible provider supported
 * No provider was assigned.
 * The order was escalated to Slack for manual intervention.
 
-Evidence: [No Eligible Provider](screenshots/07-no-eligible-provider.png)
+Evidence: ![No Eligible Provider](screenshots/07-no-eligible-provider.png)
 
 ## T03  Primary Provider Accepts
 
@@ -87,8 +87,8 @@ Input: A valid standard delivery with the simulated provider response set to acc
 
 Evidence:
 
-* [Initial Provider Accepts](screenshots/03-initial-provider-accepts.png)
-* [Customer Email Update](screenshots/08-customer-email-update.png)
+* ![Initial Provider Accepts](screenshots/03-initial-provider-accepts.png)
+* ![Customer Email Update](screenshots/08-customer-email-update.png)
 
 ## T04  Primary Provider Cancels
 
@@ -101,7 +101,7 @@ Input: A valid delivery with the simulated response set to cancel_after_acceptan
 * The workflow entered the exception-recovery path.
 * Remaining provider availability was evaluated.
 
-Evidence: [Initial Provider Cancels](screenshots/05-initial-provider-cancel.png)
+Evidence: ![Initial Provider Cancels](screenshots/05-initial-provider-cancel.png)
 
 ## T05  Primary Provider Rejects
 
@@ -114,7 +114,7 @@ Input: A valid delivery with the simulated provider response set to reject.
 * The workflow checked for another eligible provider.
 * When no remaining eligible provider was available, the order was escalated.
 
-Evidence: [Initial Provider Rejects](screenshots/04-initial-provider-rejects.png)
+Evidence: ![Initial Provider Rejects](screenshots/04-initial-provider-rejects.png)
 
 ## T06  Primary Provider Times Out
 
@@ -129,8 +129,8 @@ Input: A valid delivery with the simulated provider response set to timeout.
 
 Evidence:
 
-* [Initial Provider Timeout](screenshots/06-initial-provider-timeout.png)
-* [Slack No Provider Escalation](screenshots/11-slack-no-provider-escalation.png)
+* ![Initial Provider Timeout](screenshots/06-initial-provider-timeout.png)
+* ![Slack No Provider Escalation](screenshots/11-slack-no-provider-escalation.png)
 
 # Data Persistence Validation
 
@@ -140,7 +140,7 @@ Google Sheets append-and-update behaviour was also verified:
 * Reusing the same external order ID updated the existing row.
 * A duplicate order row was not created.
 
-## Notification Validation
+# Notification Validation
 
 The workflow successfully produced:
 

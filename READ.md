@@ -1,10 +1,10 @@
-### GreenCart Delivery Orchestration Engine
+# GreenCart Delivery Orchestration Engine
 
 An n8n proof of concept that validates delivery orders, selects eligible logistics providers, handles provider responses and routes operational exceptions to human reviewers.
 
 The workflow demonstrates how supply-chain dispatch decisions can be converted into explainable automation while retaining human intervention for orders that cannot be safely completed automatically.
 
-## Project Overview
+# Project Overview
 
 Delivery operations often require teams to manually:
 
@@ -23,6 +23,9 @@ A submitted order is validated, classified and matched against eligible provider
 
 Workflow Overview
 
+# Workflow Overview
+
+```
 flowchart TD
     A["Customer order intake"] --> B["Validate and standardise"]
     B -->|Invalid| C["Human review in Slack"]
@@ -35,10 +38,15 @@ flowchart TD
     G -->|Reject, timeout or cancel| I["Evaluate fallback provider"]
     I -->|Fallback available| F
     I -->|No fallback available| C
+```
 
-## Core Capabilities
+![Workflow overview](screenshots/01-workflow-overview.png)
 
-# Order validation
+
+
+# Core Capabilities
+
+## Order validation
 
 The workflow checks required order information before operational processing begins.
 
@@ -56,7 +64,7 @@ Validation covers:
 
 Invalid orders stop before provider assignment and are routed for human review.
 
-# Dispatch strategy selection
+## Dispatch strategy selection
 
 The workflow selects a dispatch strategy based on operational requirements.
 
@@ -77,7 +85,7 @@ Standard	Lowest Cost	80	120 minutes
 
 This precedence ensures that an urgent fragile order is treated as urgent first, while a standard order can prioritise cost efficiency.
 
-# Provider eligibility
+## Provider eligibility
 
 A provider must satisfy the delivery requirements before it can be considered for assignment.
 
@@ -93,7 +101,7 @@ The workflow evaluates:
 
 Providers that do not qualify are excluded before ranking and selection.
 
-# Provider-response handling
+## Provider-response handling
 
 The proof of concept simulates four provider responses:
 
@@ -120,7 +128,7 @@ The workflow uses the external order ID to determine whether to:
 
 Testing confirmed that submitting an existing external order ID updates its record instead of creating another row.
 
-# Human escalation
+## Human escalation
 
 Slack notifications are created when automation cannot safely complete an order.
 
@@ -135,7 +143,7 @@ Escalation scenarios include:
 
 The escalation message gives the operations team the order context, failure reason and recommended action.
 
-# Exception Paths
+## Exception Paths
 
 Invalid delivery address
 
@@ -157,7 +165,7 @@ No eligible provider
 
 When the required vehicle or delivery conditions cannot be supported, the workflow prevents an unsuitable assignment and escalates the order.
 
-## Quality Assurance
+# Quality Assurance
 
 Six controlled scenarios were retained as the final public QA dataset.
 
@@ -173,7 +181,7 @@ All six scenarios reached their expected workflow branches without an unhandled 
 
 Detailed evidence is available in test_results.md⁠￼.
 
-## KPI Dashboard
+# KPI Dashboard
 
 The Google Sheets dashboard summarises order validation, processing outcomes and provider-routing activity across the final QA dataset.
 
@@ -190,7 +198,9 @@ It tracks:
 * Reassignment requirements
 * Automation rate
 
-## Technology Stack
+![KPI Dashboard](screenshots/03-routing-kpi-dashboard.png)
+
+# Technology Stack
 
 * n8n: Workflow orchestration and conditional routing
 * Python: Validation, transformation and provider-selection logic inside n8n Code nodes
