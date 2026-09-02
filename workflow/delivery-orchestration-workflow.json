@@ -1,0 +1,4389 @@
+{
+  "name": "delivery-orchestration-workflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "GreenCart Delivery Order",
+        "formDescription": "Submit a test delivery request to rthrough the delivery orchestration and exception recovery workflow.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "External Order ID",
+              "placeholder": "GC-1001",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Customer Name",
+              "placeholder": "Frances Smarty",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Customer Email",
+              "fieldType": "email",
+              "placeholder": "frances@example.com",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Pickup Address",
+              "placeholder": "12 Benin Road, Uyo, Nigeria",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Delivery Address",
+              "placeholder": "Lekki Lagos, Nigeria",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Package SIze",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Small"
+                  },
+                  {
+                    "option": "Medium"
+                  },
+                  {
+                    "option": "Large"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Priority",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Standard"
+                  },
+                  {
+                    "option": "Express"
+                  },
+                  {
+                    "option": "Urgent"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Delivery Time Window",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Morning"
+                  },
+                  {
+                    "option": "Afternoon"
+                  },
+                  {
+                    "option": "Evening"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Vehicle Required",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Bike"
+                  },
+                  {
+                    "option": "Van"
+                  },
+                  {
+                    "option": "Car"
+                  },
+                  {
+                    "option": "Truck"
+                  },
+                  {
+                    "option": "Refrigerated Van"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Fragile Package",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Yes"
+                  },
+                  {
+                    "option": "No"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Special Delivery Instructions",
+              "fieldType": "dropdown",
+              "fieldOptions": {
+                "values": [
+                  {
+                    "option": "Call before arrival"
+                  },
+                  {
+                    "option": "Leave at reception"
+                  },
+                  {
+                    "option": "Signature required"
+                  },
+                  {
+                    "option": "None"
+                  }
+                ]
+              },
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Customer Notes"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.6,
+      "position": [
+        -8144,
+        -2544
+      ],
+      "id": "ID",
+      "name": "Receive Customer Order",
+      "webhookId": "WEBHOOK-ID"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ID",
+              "name": "external_order_id",
+              "value": "={{ $json['External Order ID'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_name",
+              "value": "={{ $json['Customer Name'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_email",
+              "value": "={{ $json['Customer Email'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "delivery_address",
+              "value": "={{ $json['Delivery Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "package_size",
+              "value": "={{ $json['Package SIze'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "priority",
+              "value": "={{ $json.Priority }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "delivery_time_window",
+              "value": "={{ $json['Delivery Time Window'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "vehicle_required",
+              "value": "={{ $json['Vehicle Required'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "fragile_package",
+              "value": "={{ $json['Fragile Package'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "special_delivery_instructions",
+              "value": "={{ $json['Special Delivery Instructions'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_notes",
+              "value": "={{ $json['Customer Notes'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "received_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "pickup_address",
+              "value": "={{ $json['Pickup Address'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "force_primary_failure",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "already_exist",
+              "value": false,
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -8144,
+        -2208
+      ],
+      "id": "ID",
+      "name": "Clean and Standardise Order"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ID",
+              "name": "external_order_id",
+              "value": "={{ $json.external_order_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "order_status",
+              "value": "={{ $json.order_status }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "eligible_provider_count",
+              "value": "={{ $json.eligible_provider_count }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "rejected_reason",
+              "value": "={{ $json.rejected_providers[0].rejection_reasons[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "rejected_providers",
+              "value": "={{ $json.rejected_providers }}",
+              "type": "array"
+            },
+            {
+              "id": "ID",
+              "name": "final_status",
+              "value": "Escalated",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "manual_intervention_required",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "operation_action",
+              "value": "Review order requirements, provider limits and  delivery promise. Decide whether to adjust the rules, contact a provider manually or update the customerr",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_internal_update",
+              "value": "Delivery requires additional review. An operations team member hasbeen notified",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "exception_stage",
+              "value": "Provider Eligibility",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "submittedAt",
+              "value": "={{ $now }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -5216,
+        -1968
+      ],
+      "id": "ID",
+      "name": "Prepare Human Escalation"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ID",
+              "name": "external_order_id",
+              "value": "={{ $('Receive Customer Order').item.json['External Order ID'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "selected_provider_name",
+              "value": "={{ $json.selected_provider.provider_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "provider_delivery_fee",
+              "value": "={{ $json.selected_provider.delivery_fee }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "provider_eta_minutes",
+              "value": "={{ $json.selected_provider.eta_minutes }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "provider_reliability_score",
+              "value": "={{ $json.selected_provider.reliability_score }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "provider_availability",
+              "value": "={{ $json.selected_provider.available }}",
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "selection_reason",
+              "value": "={{ $json.selection_reason }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "reassignment_required",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "manual_intervention_required",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "customer_internal_update",
+              "value": "=",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_first_name",
+              "value": "={{ $json.customer_name.split(' ')[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "final_status",
+              "value": "Order Processed.",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "exception_stage",
+              "value": "None",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "order_status",
+              "value": "={{ $json.order_status }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "fallback_required",
+              "value": "={{ $('Evaluate Simulated Provider Response').item.json.fallback_required }}",
+              "type": "boolean"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -4672,
+        -1312
+      ],
+      "id": "ID",
+      "name": "Primary Provider Assigned"
+    },
+    {
+      "parameters": {
+        "sendTo": "hi@example.com",
+        "subject": "=Update on your order from GreenCart",
+        "emailType": "text",
+        "message": "=Hi {{ $json.customer_first_name }},                                    \n\nWe’re pleased to let you know that your order has been successfully assigned to one of our delivery partners and is now being prepared for dispatch.\n\nDelivery Partner: {{ $json.provider_provider_name }}\nEstimated Delivery Time: Approximately {{ $json.provider_eta_minutes }} minutes\n\nYou will receive another update once your order is on its way.\n\nIf you have any questions, simply reply to this email and our support team will be happy to help.\n\nThank you for choosing GreenCart.\n\nKind regards,  \nThe GreenCart Team",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -4688,
+        -1056
+      ],
+      "id": "ID",
+      "name": "Send a message",
+      "webhookId": "ID",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ID",
+              "name": "external_order_id",
+              "value": "={{ $('Receive Customer Order').item.json['External Order ID'] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_first_name",
+              "value": "={{ $json.customer_name.split(' ')[0] }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "selected_provider",
+              "value": "={{ $json.selected_provider.provider_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "delivery_fee",
+              "value": "={{ $json.selected_provider.delivery_fee }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "eta_minutes",
+              "value": "={{ $json.selected_provider.eta_minutes }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "provider_reliability_score",
+              "value": "={{ $json.selected_provider.reliability_score }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "provider_availability",
+              "value": "={{ $json.selected_provider.available }}",
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "final_status",
+              "value": "=Order Processed.",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "exception_stage",
+              "value": "={{ $json.exception_stage }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "manual_intervention_required",
+              "value": false,
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "customer_internal_update",
+              "value": "=Delivery has been assigned to {{ $json.selected_provider.provider_name }} with an estimated ETA of\n{{ $json.selected_provider.eta_minutes }} minutes and its ready to send",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "order_status",
+              "value": "={{ $json.order_status }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_name",
+              "value": "={{ $json.customer_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "Next Action",
+              "value": "=None",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "special_delivery_instructions",
+              "value": "={{ $json.special_delivery_instructions }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "primary_provider_status",
+              "value": "={{ $json.primary_provider_status }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "primary_provider_accepted",
+              "value": "={{ $json.primary_provider_accepted }}",
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "vehicle_required",
+              "value": "={{ $json.vehicle_required }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_note",
+              "value": "={{ $json.customer_note }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "special_delivery_instructions",
+              "value": "={{ $json.special_delivery_instructions }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "primary_failure_reason",
+              "value": "={{ $json.primary_failure_reason }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "fallback_required",
+              "value": "={{ $json.fallback_required }}",
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "provider_response_timeout_minutes",
+              "value": "={{ $json.provider_response_timeout_minutes }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "provider_removed",
+              "value": "={{ $json.provider_removed }}",
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "reassignment_reason",
+              "value": "=Primary Provider {{ $('Simulate Primary Provider Response').item.json.primary_provider_response }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "exception_stage",
+              "value": "None",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -3328,
+        -1984
+      ],
+      "id": "ID",
+      "name": "Fallback Provider Assigned"
+    },
+    {
+      "parameters": {
+        "sendTo": "hi@example.com",
+        "subject": "Update on your order from GreenCart",
+        "emailType": "text",
+        "message": "=Hi {{ $json.customer_first_name}},\n\n\nWe wanted to let you know that your GreenCart delivery has been updated.  Your order is now assigned to\n{{ $json.selected_provider }}\nand is continuing through our delivery process.  Estimated Delivery Time:  {{ $json.eta_minutes }} minutes.  \n\nWe’ll continue to monitor your delivery and will let you know if anything else changes.  \n\nIf you have any questions, simply reply to this email and our support team will be happy to help.  \n\nThank you for shopping with GreenCart.  \n\nKind regards, \nThe GreenCart Team",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        -3312,
+        -1344
+      ],
+      "id": "ID",
+      "name": "Send a message1",
+      "webhookId": "WEBHOOK-ID",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "ID",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ID",
+              "name": "external_order_id",
+              "value": "={{ $json.external_order_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "final_status",
+              "value": "={{ $json.order_status }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "validation_errors",
+              "value": "={{ $json.validation_errors }}",
+              "type": "array"
+            },
+            {
+              "id": "ID",
+              "name": "recommended_action",
+              "value": "Missing or invalid order information. Get correct details before dispatch",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "manual_intervention_required",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "exception_stage",
+              "value": "Order Validation",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "processed_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_name",
+              "value": "={{ $json.customer_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_email",
+              "value": "={{ $json.customer_email }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "pickup_address",
+              "value": "={{ $json.pickup_address }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "delivery_address",
+              "value": "={{ $json.delivery_address }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "final_status",
+              "value": "Needs Attention",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "order_status",
+              "value": "={{ $json.order_status }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -6336,
+        -2000
+      ],
+      "id": "ID",
+      "name": "Needs Attention1"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "ID",
+          "mode": "list",
+          "cachedResultName": "greencart-logistics"
+        },
+        "text": "=📌 Delivery Order Requires Manual Review  \n\nOrder ID: {{ $('Receive Customer Order').item.json['External Order ID'] }}\n\nCustomer: {{ $('Receive Customer Order').item.json['Customer Name'] }}\n\nStatus: Validation Failed. Please review and resolve before dispatch.\n\nReason: {{ $json.validation_errors[0] }}\n\nPriority: {{ $('Receive Customer Order').item.json.Priority }}\n\nReceived: {{ $('Receive Customer Order').item.json.submittedAt }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        -6272,
+        -1200
+      ],
+      "id": "ID",
+      "name": "Human Escalation Order Validation1",
+      "webhookId": "WEBHOOK-ID",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "ID",
+          "name": "Slack OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\npriority = str(order.get(\"priority\", \"\")).strip()\npackage_size = str(order.get(\"package_size\", \"\")).strip()\nvehicle_required = str(order.get(\"vehicle_required\", \"\")).strip()\nfragile_package = str(order.get(\"fragile_package\", \"\")).strip()\ndelivery_time_window = str(order.get(\"delivery_time_window\", \"\")).strip()\n\nstrategy = \"Lowest Cost\"\nstrategy_reason = ( \"The order has no urgent or special handling requirement,\" \" So cost is prioritised\")\nminimum_reliability = 80\nmaximum_eta_minutes = 120\n\nif priority == \"Urgent\":\n    strategy = \"Fastest Eligible\"\n    strategy_reason = ( \" The order is urgent, so speed is prioritised while\" \" still checking provider eligibility\")\n    minimum_reliability = 85\n    maximum_eta_minutes =45\n\nelif priority  ==  \"Express\":\n    strategy = \"Balanced speed reliability\"\n    strategy_reason = ( \"The order is express, so the workflow balances speed\" \" and provider reliabilty\")\n  \n    minimum_reliability = 88\n    maximum_eta_minutes = 60\n\nelif fragile_package == \"Yes\":\n    strategy = \"Highest Reliability\"\n    strategy_reason = (\n        \"The package is fragile, so provider reliability is\"\n        \" prioritised over the lowest cost.\"\n    )\n    minimum_reliability = 92\n    maximum_eta_minutes = 90\n\nelif package_size == \"Large\" or vehicle_required in [\"Van\", \"Truck\"]:\n    strategy = \"Vehicle Capacity First\"\n    strategy_reason = (\n        \"The order requires a larger vehicle, so provider \"\n        \" capacity is checked before price.\"\n    )\n    minimum_reliability = 85\n    maximum_eta_minutes = 90\n\noutput = {\n    **order,\n    \"dispatch_strategy\": strategy,\n    \"dispatch_strategy_reason\": strategy_reason,\n    \"minimum_reliability\": minimum_reliability,\n    \"maximum_eta_minutes\": maximum_eta_minutes,\n    \"strategy_created_at\": str(order.get(\"received_at\", \"\"))\n}\n\nreturn {\"json\": output}\n"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -6576,
+        -2720
+      ],
+      "id": "ID",
+      "name": "Determine Dispatch Strategy1"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "ID",
+          "mode": "list",
+          "cachedResultName": "greencart-provider-availability-issue"
+        },
+        "text": "=🚀DELIVERY ESCALATION  \n\nOrder ID: {{ $('Receive Customer Order').item.json['External Order ID'] }}\n\nStatus: Escalated  \n\nReason: No eligible delivery provider was available for this order. \n\nOrder Details \n\nCustomer: {{ $('Receive Customer Order').item.json['Customer Name'] }}\n\nPickup: {{ $('Receive Customer Order').item.json['Pickup Address'] }}\n\nDelivery: {{ $('Receive Customer Order').item.json['Delivery Address'] }}\n\nPriority: {{ $('Receive Customer Order').item.json.Priority }}\n\nVehicle Required: {{ $('Receive Customer Order').item.json['Vehicle Required'] }}\n\nStatus: Review provider availability, delivery requirements and dispatch rules. Adjust provider selection if appropriate or manually assign a carrier.  \n\nWorkflow Status: Manual intervention required.",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        -5248,
+        -1392
+      ],
+      "id": "ID",
+      "name": "Human Escalation Unavailable Provider1",
+      "webhookId": "ID",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "ID",
+          "name": "Slack OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "ID",
+          "mode": "list",
+          "cachedResultName": " Proof Of Concept",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "external_order_id": "={{ $('Primary Provider Assigned').item.json.external_order_id }}",
+            "customer_name": "={{ $('Receive Customer Order').item.json['Customer Name'] }}",
+            "customer_email": "={{ $('Receive Customer Order').item.json['Customer Email'] }}",
+            "pickup_address": "={{ $('Receive Customer Order').item.json['Pickup Address'] }}",
+            "delivery_address": "={{ $('Receive Customer Order').item.json['Delivery Address'] }}",
+            "priority": "={{ $('Receive Customer Order').item.json.Priority }}",
+            "vehicle_required": "={{ $('Receive Customer Order').item.json['Vehicle Required'] }}",
+            "package_size": "={{ $('Receive Customer Order').item.json['Package SIze'] }}",
+            "fragile_package": "={{ $('Receive Customer Order').item.json['Fragile Package'] }}",
+            "delivery_time_window": "={{ $('Receive Customer Order').item.json['Delivery Time Window'] }}",
+            "special_delivery_instructions": "={{ $('Receive Customer Order').item.json['Special Delivery Instructions'] }}",
+            "customer_note": "={{ $('Receive Customer Order').item.json['Customer Notes'] }}",
+            "processed_at": "={{ $('Receive Customer Order').item.json.submittedAt }}",
+            "outcome_summary": "={{ $('Primary Provider Assigned').item.json.selection_reason }}",
+            "estimated_eta_minutes": "={{ $('Primary Provider Assigned').item.json.provider_eta_minutes }}",
+            "selected_provider": "={{ $('Primary Provider Assigned').item.json.selected_provider_name }}",
+            "reliability_score": "={{ $('Primary Provider Assigned').item.json.provider_reliability_score }}",
+            "reassignment_required": "={{ $('Primary Provider Assigned').item.json.reassignment_required }}",
+            "provider_availability": "={{ $('Primary Provider Assigned').item.json.provider_availability }}",
+            "manual_intervention_required": "={{ $('Primary Provider Assigned').item.json.manual_intervention_required }}",
+            "Next Action": "={{ $('Primary Provider Assigned').item.json.customer_internal_update }}",
+            "final_status": "={{ $json.outcome_summary }}",
+            "exception_stage": "={{ $('Primary Provider Assigned').item.json.exception_stage }}",
+            "OOrder  Status": "={{ $('Primary Provider Assigned').item.json.order_status }}",
+            "$ delivery_fee": "={{ $('Route Simulated Provider Response').item.json.selected_provider.delivery_fee }}",
+            "additional_cost": "={{ $json.additional_cost }}",
+            "manual_minutes_saved": "={{ $json.manual_minutes_saved }}",
+            "force_primary_failure": "={{ $('Clean and Standardise Order').item.json.force_primary_failure }}"
+          },
+          "matchingColumns": [
+            "external_order_id"
+          ],
+          "schema": [
+            {
+              "id": "external_order_id",
+              "displayName": "external_order_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_email",
+              "displayName": "customer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pickup_address",
+              "displayName": "pickup_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_address",
+              "displayName": "delivery_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "vehicle_required",
+              "displayName": "vehicle_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exception_stage",
+              "displayName": "exception_stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "package_size",
+              "displayName": "package_size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_time_window",
+              "displayName": "delivery_time_window",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fragile_package",
+              "displayName": "fragile_package",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "special_delivery_instructions",
+              "displayName": "special_delivery_instructions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_note",
+              "displayName": "customer_note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "OOrder  Status",
+              "displayName": "OOrder  Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "provider_availability",
+              "displayName": "provider_availability",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rejection_reason",
+              "displayName": "rejection_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reassignment_failure_reason",
+              "displayName": "reassignment_failure_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "selected_provider",
+              "displayName": "selected_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "failed_provider",
+              "displayName": "failed_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "fallback_provider",
+              "displayName": "fallback_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "$ delivery_fee",
+              "displayName": "$ delivery_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estimated_eta_minutes",
+              "displayName": "estimated_eta_minutes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reliability_score",
+              "displayName": "reliability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_intervention_required",
+              "displayName": "manual_intervention_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_required",
+              "displayName": "reassignment_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "additional_cost",
+              "displayName": "additional_cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_minutes_saved",
+              "displayName": "manual_minutes_saved",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Next Action",
+              "displayName": "Next Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "outcome_summary",
+              "displayName": "outcome_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "force_primary_failure",
+              "displayName": "force_primary_failure",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "final_status",
+              "displayName": "final_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -4736,
+        -560
+      ],
+      "id": "ID",
+      "name": "Update row in sheet3",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ID",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ID",
+              "name": "external_order_id",
+              "value": "={{ $json.external_order_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "final_status",
+              "value": "Escalated",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "failed_provider",
+              "value": "={{ $json.failed_provider.provider_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "primary_failure_reason",
+              "value": "={{ $json.primary_failure_reason }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "reassignment_failure_reason",
+              "value": "={{ $json.reassignment_failure_reason }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "manual_intervention_required",
+              "value": true,
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "operator_action",
+              "value": "Review available providers, delivery requirements and customer promise. Manually assign a provider or contactthe customer if the delivery commitment cannot be met",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_internal_update",
+              "value": "Pending Manual Review",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "exception_stage",
+              "value": "Provider Reassignment",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -3904,
+        -1248
+      ],
+      "id": "ID",
+      "name": "Prepare Human Escalation3"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\n\nmanual_raw = order.get(\n    \"manual_intervention_required\",\n    False\n)\n\ndef to_bool(value):\n    if isinstance(value, str):\n        return value.strip().lower() == \"true\"\n    return bool(value)\n\nmanual_intervention_required = to_bool(\n    manual_raw\n)\n\n\n# Get selected provider safely\n\nselected_provider_raw = order.get(\n    \"selected_provider\",\n    {}\n)\n\nif isinstance(selected_provider_raw, dict):\n    selected_provider_name = str(\n        selected_provider_raw.get(\n            \"provider_name\",\n            \"\"\n        )\n    ).strip()\n\n    selected_provider_fee = float(\n        selected_provider_raw.get(\n            \"delivery_fee\",\n            0\n        ) or 0\n    )\n\nelse:\n    selected_provider_name = str(\n        selected_provider_raw or \"\"\n    ).strip()\n\n    selected_provider_fee = float(\n        order.get(\n            \"delivery_fee\",\n            0\n        ) or 0\n    )\n\n\n# Accepted path business metrics\n\nif manual_intervention_required:\n    manual_minutes_saved = 0\nelse:\n    manual_minutes_saved = 10\n\nadditional_cost = 0\n\n\n# Accepted path outcome\n\noutcome_summary = (\n    \"Order processed.\"\n)\n\n\nreturn {\n    \"json\": {\n        **order,\n        \"selected_provider_name\": selected_provider_name,\n        \"selected_provider_fee\": selected_provider_fee,\n        \"manual_minutes_saved\": manual_minutes_saved,\n        \"additional_cost\": additional_cost,\n        \"outcome_summary\": outcome_summary\n    }\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3296,
+        -1632
+      ],
+      "id": "ID",
+      "name": "Business Outcome4"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\n\nmanual_raw = order.get(\"manual_intervention_required\", False)\nreassignment_raw = order.get(\"reassignment_required\", False)\nfallback_raw = order.get(\"fallback_required\", False)\n\ndef to_bool(value):\n    if isinstance(value, str):\n        return value.strip().lower() == \"true\"\n    return bool(value)\n\nmanual_intervention_required = to_bool(manual_raw)\nreassignment_required = to_bool(reassignment_raw)\nfallback_required = to_bool(fallback_raw)\n\nprovider_response = str(\n    order.get(\"primary_provider_response\", \"\")\n).strip().lower()\n\n\n# Estimated manual work avoided\n\nif manual_intervention_required:\n    manual_minutes_saved = 0\nelse:\n    manual_minutes_saved = 10\n\n\n# Additional cost caused by recovery\n\nselected_provider = order.get(\"selected_provider\") or {}\n\nselected_fee = float(\n    selected_provider.get(\"delivery_fee\", 0) or 0\n)\n\n# BudgetGo is the simulated failed/original provider\nbudgetgo_fee = 6.0\n\nif manual_intervention_required:\n    additional_cost = 0\n\nelif reassignment_required:\n    additional_cost = max(\n        selected_fee - budgetgo_fee,\n        0\n    )\n\nelse:\n    additional_cost = 0\n\n\n# Business outcome summary\n\nif manual_intervention_required:\n    outcome_summary = (\n        \"Automation could not safely complete the order. \"\n        \"Human intervention required.\"\n    )\n\nelif reassignment_required:\n    outcome_summary = (\n        \"Primary provider could not complete the order. \"\n        \"The workflow automatically recovered using a fallback provider.\"\n    )\n\nelif provider_response == \"accept\":\n    outcome_summary = (\n        \"Order processed automatically with the primary provider.\"\n    )\n\nelse:\n    outcome_summary = \"Order processed automatically.\"\n\n\nreturn {\n    \"json\": {\n        **order,\n        \"manual_minutes_saved\": manual_minutes_saved,\n        \"failed_provider_fee\": budgetgo_fee,\n        \"selected_provider_fee\": selected_fee,\n        \"additional_cost\": additional_cost,\n        \"outcome_summary\": outcome_summary\n    }\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5232,
+        -1664
+      ],
+      "id": "ID",
+      "name": "Business Outcome7"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\n\nmanual_raw = order.get(\"manual_intervention_required\", False)\nreassignment_raw = order.get(\"reassignment_required\", False)\nfallback_raw = order.get(\"fallback_required\", False)\n\ndef to_bool(value):\n    if isinstance(value, str):\n        return value.strip().lower() == \"true\"\n    return bool(value)\n\nmanual_intervention_required = to_bool(manual_raw)\nreassignment_required = to_bool(reassignment_raw)\nfallback_required = to_bool(fallback_raw)\n\nprovider_response = str(\n    order.get(\"primary_provider_response\", \"\")\n).strip().lower()\n\n\n# Estimated manual work avoided\n\nif manual_intervention_required:\n    manual_minutes_saved = 0\nelse:\n    manual_minutes_saved = 10\n\n\n# Additional cost caused by recovery\n\nselected_provider = order.get(\"selected_provider\") or {}\n\nselected_fee = float(\n    selected_provider.get(\"delivery_fee\", 0) or 0\n)\n\n# BudgetGo is the simulated failed/original provider\nbudgetgo_fee = 6.0\n\nif manual_intervention_required:\n    additional_cost = 0\n\nelif reassignment_required:\n    additional_cost = max(\n        selected_fee - budgetgo_fee,\n        0\n    )\n\nelse:\n    additional_cost = 0\n\n\n# Business outcome summary\n\nif manual_intervention_required:\n    outcome_summary = (\n        \"Automation could not safely complete the order. \"\n        \"Human intervention required.\"\n    )\n\nelif reassignment_required:\n    outcome_summary = (\n        \"Primary provider could not complete the order. \"\n        \"The workflow automatically recovered using a fallback provider.\"\n    )\n\nelif provider_response == \"accept\":\n    outcome_summary = (\n        \"Order processed automatically with the primary provider.\"\n    )\n\nelse:\n    outcome_summary = \"Order processed automatically.\"\n\n\nreturn {\n    \"json\": {\n        **order,\n        \"manual_minutes_saved\": manual_minutes_saved,\n        \"failed_provider_fee\": budgetgo_fee,\n        \"selected_provider_fee\": selected_fee,\n        \"additional_cost\": additional_cost,\n        \"outcome_summary\": outcome_summary\n    }\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -6272,
+        -1648
+      ],
+      "id": "ID",
+      "name": "Business Outcome8"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\nfinal_status = str(order.get(\"final_status\", \"\")).strip()\n\n# Estimated manual work avoided\nif final_status in [\"Order processed\", \"Re-Assigned\"]:\n    manual_minutes_saved = 10\nelse:\n    manual_minutes_saved = 0\n\n# Additional cost caused by fallback\nadditional_cost = 0\n\nif final_status == \"Re-Assigned\":\n    original_fee = float(order.get(\"original_delivery_fee\", 0) or 0)\n    final_fee = float(order.get(\"delivery_fee\", 0) or 0)\n    additional_cost = max(final_fee - original_fee, 0)\n\n# Business outcome summary\nif final_status == \"Order processed.\":\n    outcome_summary = \"Order automatically assigned to primary provider.\"\n\nelif final_status == \"Re-Assigned\":\n    outcome_summary = \"Primary provider failed. Order automatically recovered using fallback provider.\"\n\nelif final_status == \"Needs Attention\":\n    outcome_summary = \"Order requires human attention before dispatch.\"\n\nelif final_status == \"Escalated\":\n    outcome_summary = \"Automation could not complete dispatch. Human intervention required.\"\n\nelse:\n    outcome_summary = \"Escalated.\"\n\nreturn {\n    \"json\": {\n        **order,\n        \"manual_minutes_saved\": manual_minutes_saved,\n        \"additional_cost\": additional_cost,\n        \"outcome_summary\": outcome_summary\n    }\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3904,
+        -976
+      ],
+      "id": "ID",
+      "name": "Business Outcome9"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\nfinal_status = str(order.get(\"final_status\", \"\")).strip()\n\n# Estimated manual work avoided\nif final_status in [\"Order processed\", \"Re-Assigned\"]:\n    manual_minutes_saved = 10\nelse:\n    manual_minutes_saved = 0\n\n# Additional cost caused by fallback\nadditional_cost = 0\n\nif final_status == \"Re-Assigned\":\n    original_fee = float(order.get(\"original_delivery_fee\", 0) or 0)\n    final_fee = float(order.get(\"delivery_fee\", 0) or 0)\n    additional_cost = max(final_fee - original_fee, 0)\n\n# Business outcome summary\nif final_status == \"Order processed.\":\n    outcome_summary = \"Order automatically assigned to primary provider.\"\n\nelif final_status == \"Re-Assigned\":\n    outcome_summary = \"Primary provider failed. Order automatically recovered using fallback provider.\"\n\nelif final_status == \"Needs Attention\":\n    outcome_summary = \"Order requires human attention before dispatch.\"\n\nelif final_status == \"Escalated\":\n    outcome_summary = \"Automation could not complete dispatch. Human intervention required.\"\n\nelse:\n    outcome_summary = \"Order Processed.\"\n\nreturn {\n    \"json\": {\n        **order,\n        \"manual_minutes_saved\": manual_minutes_saved,\n        \"additional_cost\": additional_cost,\n        \"outcome_summary\": outcome_summary\n    }\n}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4720,
+        -800
+      ],
+      "id": "ID",
+      "name": "Business Outcome10"
+    },
+    {
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "ID",
+          "mode": "list",
+          "cachedResultName": "ROUTING",
+          "cachedResultUrl": "REDACTED_SHEET_URL",
+        
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "customer_name": "={{ $('Receive Customer Order').item.json['Customer Name'] }}",
+            "external_order_id": "={{ $('Receive Customer Order').item.json['External Order ID'] }}",
+            "customer_email": "={{ $('Receive Customer Order').item.json['Customer Email'] }}",
+            "pickup_address": "={{ $('Receive Customer Order').item.json['Pickup Address'] }}",
+            "delivery_address": "={{ $('Receive Customer Order').item.json['Delivery Address'] }}",
+            "priority": "={{ $('Receive Customer Order').item.json.Priority }}",
+            "vehicle_required": "={{ $('Receive Customer Order').item.json['Vehicle Required'] }}",
+            "final_status": "={{ $('Needs Attention1').item.json.final_status }}",
+            "processed_at": "={{ $now }}",
+            "manual_intervention_required": "={{ $('Needs Attention1').item.json.manual_intervention_required }}",
+            "outcome_summary": "={{ $('Needs Attention1').item.json.validation_errors[0] }}",
+            "exception_stage": "={{ $('Needs Attention1').item.json.exception_stage }}",
+            "package_size": "={{ $('Receive Customer Order').item.json['Package SIze'] }}",
+            "delivery_time_window": "={{ $('Receive Customer Order').item.json['Delivery Time Window'] }}",
+            "customer_note": "={{ $('Receive Customer Order').item.json['Customer Notes'] }}",
+            "special_delivery_instructions": "={{ $('Receive Customer Order').item.json['Special Delivery Instructions'] }}",
+            "fragile_package": "={{ $('Receive Customer Order').item.json['Fragile Package'] }}",
+            "Next Action": "={{ $('Needs Attention1').item.json.recommended_action }}\n",
+            "row_number": 0,
+            "provider_availability": "",
+            "force_primary_failure": "={{ $('Clean and Standardise Order').item.json.force_primary_failure }}",
+            "additional_cost": "={{ $('Business Outcome8').item.json.additional_cost }}",
+            "manual_minutes_saved": "={{ $('Business Outcome8').item.json.manual_minutes_saved }}",
+            "OOrder  Status": "={{ $('Did Validation Pass?2').item.json.order_status }}"
+          },
+          "matchingColumns": [
+            "external_order_id"
+          ],
+          "schema": [
+            {
+              "id": "external_order_id",
+              "displayName": "external_order_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_email",
+              "displayName": "customer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pickup_address",
+              "displayName": "pickup_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_address",
+              "displayName": "delivery_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "vehicle_required",
+              "displayName": "vehicle_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exception_stage",
+              "displayName": "exception_stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "package_size",
+              "displayName": "package_size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_time_window",
+              "displayName": "delivery_time_window",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fragile_package",
+              "displayName": "fragile_package",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "special_delivery_instructions",
+              "displayName": "special_delivery_instructions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_note",
+              "displayName": "customer_note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "OOrder  Status",
+              "displayName": "OOrder  Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "provider_availability",
+              "displayName": "provider_availability",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rejection_reason",
+              "displayName": "rejection_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_failure_reason",
+              "displayName": "reassignment_failure_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "selected_provider",
+              "displayName": "selected_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "failed_provider",
+              "displayName": "failed_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "fallback_provider",
+              "displayName": "fallback_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "$ delivery_fee",
+              "displayName": "$ delivery_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estimated_eta_minutes",
+              "displayName": "estimated_eta_minutes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reliability_score",
+              "displayName": "reliability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "manual_intervention_required",
+              "displayName": "manual_intervention_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_required",
+              "displayName": "reassignment_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "additional_cost",
+              "displayName": "additional_cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_minutes_saved",
+              "displayName": "manual_minutes_saved",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Next Action",
+              "displayName": "Next Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "outcome_summary",
+              "displayName": "outcome_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "force_primary_failure",
+              "displayName": "force_primary_failure",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "final_status",
+              "displayName": "final_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -6208,
+        -864
+      ],
+      "id": "ID",
+      "name": "Append or update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ID",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    
+      "parameters": {
+        "operation": "appendOrUpdate",
+        "documentId": {
+          "__rl": true,
+          "value": "ID",
+          "mode": "list",
+          "cachedResultName": "ROUTING",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "external_order_id": "={{ $json.external_order_id }}",
+            "customer_name": "={{ $json.customer_name }}",
+            "customer_email": "={{ $json.customer_email }}",
+            "pickup_address": "={{ $json.pickup_address }}",
+            "delivery_address": "={{ $json.delivery_address }}",
+            "priority": "={{ $('Receive Customer Order').item.json.Priority }}",
+            "vehicle_required": "={{ $('Receive Customer Order').item.json['Vehicle Required'] }}",
+            "package_size": "={{ $('Receive Customer Order').item.json['Package SIze'] }}",
+            "delivery_time_window": "={{ $('Receive Customer Order').item.json['Delivery Time Window'] }}",
+            "fragile_package": "={{ $('Receive Customer Order').item.json['Fragile Package'] }}",
+            "special_delivery_instructions": "={{ $('Receive Customer Order').item.json['Special Delivery Instructions'] }}",
+            "customer_note": "={{ $('Receive Customer Order').item.json['Customer Notes'] }}"
+          },
+          "matchingColumns": [
+            "external_order_id"
+          ],
+          "schema": [
+            {
+              "id": "external_order_id",
+              "displayName": "external_order_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_email",
+              "displayName": "customer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pickup_address",
+              "displayName": "pickup_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_address",
+              "displayName": "delivery_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "vehicle_required",
+              "displayName": "vehicle_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exception_stage",
+              "displayName": "exception_stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "package_size",
+              "displayName": "package_size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_time_window",
+              "displayName": "delivery_time_window",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fragile_package",
+              "displayName": "fragile_package",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "special_delivery_instructions",
+              "displayName": "special_delivery_instructions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_note",
+              "displayName": "customer_note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "OOrder  Status",
+              "displayName": "OOrder  Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "provider_availability",
+              "displayName": "provider_availability",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "rejection_reason",
+              "displayName": "rejection_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_failure_reason",
+              "displayName": "reassignment_failure_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "selected_provider",
+              "displayName": "selected_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "failed_provider",
+              "displayName": "failed_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fallback_provider",
+              "displayName": "fallback_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "$ delivery_fee",
+              "displayName": "$ delivery_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estimated_eta_minutes",
+              "displayName": "estimated_eta_minutes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reliability_score",
+              "displayName": "reliability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_intervention_required",
+              "displayName": "manual_intervention_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "reassignment_required",
+              "displayName": "reassignment_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "additional_cost",
+              "displayName": "additional_cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_minutes_saved",
+              "displayName": "manual_minutes_saved",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Next Action",
+              "displayName": "Next Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "outcome_summary",
+              "displayName": "outcome_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "force_primary_failure",
+              "displayName": "force_primary_failure",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "final_status",
+              "displayName": "final_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -8112,
+        -1808
+      ],
+      "id": "ID",
+      "name": "Upsert Intake Record by External Order ID",
+      "alwaysOutputData": false,
+      "notesInFlow": false,
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ID",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ID",
+              "name": "external_order_id",
+              "value": "={{ $json.external_order_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_name",
+              "value": "={{ $json.customer_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_email",
+              "value": "={{ $json.customer_email }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "pickup_address",
+              "value": "={{ $json.pickup_address }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "delivery_address",
+              "value": "={{ $json.delivery_address }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "vehicle_required",
+              "value": "={{ $json.vehicle_required }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "package_size",
+              "value": "={{ $json.package_size }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "delivery_time_window",
+              "value": "={{ $json.delivery_time_window }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "fragile_package",
+              "value": "={{ $json.fragile_package }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "special_delivery_instructions",
+              "value": "={{ $json.special_delivery_instructions }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_note",
+              "value": "={{ $json.customer_note }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "processed_at",
+              "value": "={{ $('Clean and Standardise Order').item.json.received_at }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -8064,
+        -1456
+      ],
+      "id": "ID",
+      "name": "Restore Standardised Order After Intake Upsert"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\nerrors = []\n\nrequired_fields = {\n    \"external_order_id\": \"External Order ID\",\n    \"customer_name\": \"Customer Name\",\n    \"customer_email\": \"Customer Email\",\n    \"pickup_address\": \"Pickup Address\",\n    \"delivery_address\": \"Delivery Address\",\n    \"package_size\": \"Package Size\",\n    \"priority\": \"Priority\",\n    \"vehicle_required\": \"Vehicle Required\",\n    \"delivery_time_window\": \"Delivery Time Window\",\n    \"fragile_package\": \"Fragile Package\",\n    \"special_delivery_instructions\": \"Special Delivery Instructions\"\n}\n\nfor field_name, field_label in required_fields.items():\n    value = str(order.get(field_name, \"\")).strip()\n\n    if not value:\n        errors.append(f\"{field_label} is missing\")\n\ncustomer_email = str(\n    order.get(\"customer_email\", \"\")\n).strip()\n\nif customer_email:\n    email_parts = customer_email.split(\"@\")\n\n    if (\n        len(email_parts) != 2\n        or not email_parts[0]\n        or \".\" not in email_parts[1]\n    ):\n        errors.append(\"Customer Email is invalid\")\n\npickup_address = str(\n    order.get(\"pickup_address\", \"\")\n).strip()\n\nif pickup_address:\n    if not any(character.isdigit() for character in pickup_address):\n        errors.append(\n            \"Pickup Address needs attention. \"\n            \"Please provide a house or building number.\"\n        )\n\ndelivery_address = str(\n    order.get(\"delivery_address\", \"\")\n).strip()\n\nif delivery_address:\n    if not any(character.isdigit() for character in delivery_address):\n        errors.append(\n            \"Delivery Address needs attention. \"\n            \"Please provide a house or building number.\"\n        )\n\nvalidation_passed = len(errors) == 0\n\noutput = {\n    **order,\n    \"validation_passed\": validation_passed,\n    \"validation_errors\": errors,\n    \"order_status\": (\n        \"Validated\"\n        if validation_passed\n        else \"Needs Attention\"\n    )\n}\n\nreturn {\"json\": output}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -7616,
+        -2384
+      ],
+      "id": "ID",
+      "name": "Validate Required Order Data2"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ID",
+              "leftValue": "={{ $json.validation_passed }}",
+              "rightValue": "",
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -7152,
+        -2368
+      ],
+      "id": "ID",
+      "name": "Did Validation Pass?2"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": " #Add a new field called 'my_new_field' to the JSON of t_\norder = _item[\"json\"]\n\nproviders = [\n  {\n    \"provider_id\": \"greencart_fleet\",\n\n        \"provider_name\": \"GreenCart Fleet\",\n\n        \"provider_type\": \"Internal Fleet\",\n\n        \"delivery_fee\": 8,\n\n        \"eta_minutes\": 45,\n\n        \"reliability_score\": 92,\n\n        \"available\": True,\n\n        \"vehicle_sizes\": [\"Bike\", \"Car\", \"Van\", \"Truck\"]\n\n    },\n\n    {\n\n        \"provider_id\": \"swiftdrop\",\n\n        \"provider_name\": \"SwiftDrop\",\n\n        \"provider_type\": \"External Carrier\",\n\n        \"delivery_fee\": 11,\n\n        \"eta_minutes\": 30,\n\n        \"reliability_score\": 97,\n\n        \"available\": True,\n\n        \"vehicle_sizes\": [\"Car\", \"Van\", \"Truck\"]\n\n    },\n\n    {\n\n        \"provider_id\": \"budgetgo\",\n\n        \"provider_name\": \"BudgetGo\",\n\n        \"provider_type\": \"External Carrier\",\n\n        \"delivery_fee\": 6,\n\n        \"eta_minutes\": 65,\n\n        \"reliability_score\": 82,\n\n        \"available\": True,\n\n        \"vehicle_sizes\": [\"Bike\", \"Car\"]\n  }\n]\noutput = {\n\n    **order,\n\n    \"provider_quotes\": providers,\n\n    \"provider_quote_count\": len(providers)\n\n}\n\nreturn {\"json\": output}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5920,
+        -2736
+      ],
+      "id": "ID",
+      "name": "Generate Mock Provider Quotes"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\n\nproviders = order.get(\"provider_quotes\", [])\n\nrequired_vehicle = str(\n    order.get(\"vehicle_required\", \"\")\n).strip().lower()\n\nminimum_reliability = float(\n    order.get(\"minimum_reliability\", 0)\n)\n\nmaximum_eta_minutes = float(\n    order.get(\"maximum_eta_minutes\", 120)\n)\n\neligible_providers = []\nrejected_providers = []\n\nfor provider in providers:\n    supported_vehicles = [\n        str(vehicle).strip().lower()\n        for vehicle in provider.get(\"vehicle_sizes\", [])\n    ]\n\n    has_required_vehicle = (\n        required_vehicle in supported_vehicles\n    )\n\n    is_available = bool(\n        provider.get(\"available\", False)\n    )\n\n    is_reliable_enough = (\n        float(provider.get(\"reliability_score\", 0))\n        >= minimum_reliability\n    )\n\n    is_fast_enough = (\n        float(provider.get(\"eta_minutes\", 999))\n        <= maximum_eta_minutes\n    )\n\n    rejection_reasons = []\n\n    if not is_available:\n        rejection_reasons.append(\"Provider is not available\")\n\n    if not has_required_vehicle:\n        rejection_reasons.append(\n            \"Required vehicle is not supported\"\n        )\n\n    if not is_reliable_enough:\n        rejection_reasons.append(\n            \"Below minimum reliability\"\n        )\n\n    if not is_fast_enough:\n        rejection_reasons.append(\n            \"Cannot meet maximum ETA\"\n        )\n\n    if len(rejection_reasons) == 0:\n        eligible_providers.append(provider)\n    else:\n        rejected_providers.append({\n            \"provider_id\": provider.get(\"provider_id\"),\n            \"provider_name\": provider.get(\"provider_name\"),\n            \"rejection_reasons\": rejection_reasons\n        })\n\noutput = {\n    **order,\n    \"eligible_providers\": eligible_providers,\n    \"rejected_providers\": rejected_providers,\n    \"eligible_provider_count\": len(eligible_providers),\n    \"rejected_provider_count\": len(rejected_providers)\n}\n\nreturn {\"json\": output}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -5424,
+        -2800
+      ],
+      "id": "ID",
+      "name": "Filter Eligibile Providers"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ID",
+              "leftValue": "={{ $json.eligible_provider_count }}",
+              "rightValue": 0,
+              "operator": {
+                "type": "number",
+                "operation": "gt"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -5456,
+        -2256
+      ],
+      "id": "ID",
+      "name": "Is an Eligibile Provider Available?"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\nproviders = list(order.get(\"eligible_providers\", []))\nstrategy = str(order.get(\"dispatch_strategy\", \"\")).strip()\n\nif strategy == \"Highest Reliability\":\n    providers.sort(\n        key=lambda provider: (\n            -float(provider.get(\"reliability_score\", 0)),\n            float(provider.get(\"delivery_fee\", 999))\n        )\n    )\n\nelif strategy == \"Fastest Eligible\":\n    providers.sort(\n        key=lambda provider: (\n            float(provider.get(\"eta_minutes\", 999)),\n            -float(provider.get(\"reliability_score\", 0))\n        )\n    )\n\nelif strategy == \"Balanced Speed Reliability\":\n    providers.sort(\n        key=lambda provider: (\n            float(provider.get(\"eta_minutes\", 999)),\n            -float(provider.get(\"reliability_score\", 0)),\n            float(provider.get(\"delivery_fee\", 999))\n        )\n    )\n\nelif strategy == \"Vehicle Capacity First\":\n    providers.sort(\n        key=lambda provider: (\n            -float(provider.get(\"reliability_score\", 0)),\n            float(provider.get(\"eta_minutes\", 999))\n        )\n    )\n\nelse:\n    providers.sort(\n        key=lambda provider: (\n            float(provider.get(\"delivery_fee\", 999)),\n            -float(provider.get(\"reliability_score\", 0))\n        )\n    )\n\nselected_provider = providers[0]\nfallback_providers = providers[1:]\n\nfallback_provider = (\n  fallback_providers[0]\n  if fallback_providers\n  else \" No Eligible Provider\"\n)\n\noutput = {\n    **order,\n    \"selected_provider\": selected_provider,\n    \"fallback_provider\": fallback_provider,\n    \"fallback_providers\": fallback_providers,\n    \"fallback_provider\": None,\n    \"selection_reason\": (\n        f\"Selected {selected_provider.get('provider_name')} \"\n        f\"using the {strategy} strategy.\"\n    )\n}\n\nreturn {\"json\": output}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4592,
+        -2496
+      ],
+      "id": "ID",
+      "name": "Select Best Provider"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "ID",
+              "name": "external_order_id",
+              "value": "={{ $json.external_order_id }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_name",
+              "value": "={{ $json.customer_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "selected_provider_name",
+              "value": "={{ $json.selected_provider.provider_name }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "selected_delivery_fee",
+              "value": "={{ $json.selected_provider.delivery_fee }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "seleceted_eta_minutes",
+              "value": "={{ $json.selected_provider.eta_minutes }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "seleceted_reliability_score",
+              "value": "={{ $json.selected_provider.reliability_score }}",
+              "type": "number"
+            },
+            {
+              "id": "ID",
+              "name": "selected_provider_availability",
+              "value": "={{ $json.selected_provider.available }}",
+              "type": "boolean"
+            },
+            {
+              "id": "ID",
+              "name": "order_status",
+              "value": "={{ $json.order_status }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "priority",
+              "value": "={{ $json.priority }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "special_delivery_instructions",
+              "value": "={{ $json.special_delivery_instructions }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_note",
+              "value": "={{ $json.customer_note }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "processed_at",
+              "value": "={{ $now }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "vehicle_required",
+              "value": "={{ $json.vehicle_required }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "pickup_address",
+              "value": "={{ $json.pickup_address }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "delivery_address",
+              "value": "={{ $json.delivery_address }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "package_size",
+              "value": "={{ $json.package_size }}",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "primary_provider_response",
+              "value": "accept",
+              "type": "string"
+            },
+            {
+              "id": "ID",
+              "name": "customer_first_name",
+              "value": "={{ $json.customer_name.split(' ')[0] }}",
+              "type": "string"
+            }
+          ]
+        },
+        "includeOtherFields": true,
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.5,
+      "position": [
+        -4576,
+        -2224
+      ],
+      "id": "ID",
+      "name": "Simulate Primary Provider Response",
+      "notesInFlow": true,
+      "notes": "QA SIMULATION CONTROL\n\nChange primary_provider_response to one of:\n\naccept\nreject\ntimeout\ncancel_after_acceptance\n\nOnly one value should exist at a time."
+    },
+    {
+      "parameters": {
+        "rules": {
+          "values": [
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ID",
+                    "leftValue": "={{ $json.primary_provider_response }}",
+                    "rightValue": "accept",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "accept"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ID",
+                    "leftValue": "={{ $json.primary_provider_response }}",
+                    "rightValue": "reject",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "reject"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ID",
+                    "leftValue": "={{ $json.primary_provider_response }}",
+                    "rightValue": "cancel",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "cancel"
+            },
+            {
+              "conditions": {
+                "options": {
+                  "caseSensitive": true,
+                  "leftValue": "",
+                  "typeValidation": "strict",
+                  "version": 3
+                },
+                "conditions": [
+                  {
+                    "id": "ID",
+                    "leftValue": "={{ $json.primary_provider_response }}",
+                    "rightValue": "timeout",
+                    "operator": {
+                      "type": "string",
+                      "operation": "equals"
+                    }
+                  }
+                ],
+                "combinator": "and"
+              },
+              "renameOutput": true,
+              "outputKey": "Timeout"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.switch",
+      "typeVersion": 3.4,
+      "position": [
+        -4672,
+        -1632
+      ],
+      "id": "ID",
+      "name": "Route Simulated Provider Response"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\nselected_provider = order.get(\"selected_provider\", {})\n\nprimary_provider = str(\n    selected_provider.get(\"provider_name\", \"\")\n).strip()\n\nprimary_provider_response = str(\n    order.get(\"primary_provider_response\", \"timeout\")\n).strip().lower()\n\nresponse_timeout_minutes = int(\n    order.get(\"provider_response_timeout_minutes\", 30)\n)\n\ncancellation_after_minutes = int(\n    order.get(\"cancellation_after_minutes\", 3)\n)\n\ninitial_provider_accepted = False\nprimary_provider_accepted = False\nprimary_provider_status = \"\"\nprimary_failure_reason = None\nfallback_required = False\n\n\nif primary_provider_response == \"accept\":\n    initial_provider_accepted = True\n    primary_provider_accepted = True\n    primary_provider_status = \"accepted\"\n\nelif primary_provider_response == \"reject\":\n    primary_provider_status = \"rejected_by_provider\"\n    primary_failure_reason = (\n        \"Primary provider declined the delivery request.\"\n    )\n    fallback_required = True\n\nelif primary_provider_response == \"timeout\":\n    primary_provider_status = \"provider_response_timeout\"\n    primary_failure_reason = (\n        f\"Primary provider did not respond within \"\n        f\"{response_timeout_minutes} minutes.\"\n    )\n    fallback_required = True\n\nelif primary_provider_response in [\n  \"cancel\",\n  \"cancel_after_acceptance\",\n  \"cancelled_after_acceptance\",\n  \"canceled_after_acceptance\"\n]:\n    initial_provider_accepted = True\n    primary_provider_accepted = False\n    primary_provider_status = \"canceled_by_provider\"\n    primary_failure_reason = (\n        f\"Primary provider accepted the delivery but \"\n        f\"canceled after {cancellation_after_minutes} minutes.\"\n    )\n    fallback_required = True\n\nelse:\n    initial_provider_accepted = True\n    primary_provider_accepted = True\n    primary_provider_status = \"accepted\"\n\n\noutput = {\n    **order,\n    \"initial_provider_accepted\": initial_provider_accepted,\n    \"primary_provider_accepted\": primary_provider_accepted,\n    \"primary_provider\": primary_provider,\n    \"primary_provider_name\": primary_provider,\n    \"primary_provider_response\": primary_provider_response,\n    \"primary_provider_status\": primary_provider_status,\n    \"primary_failure_reason\": primary_failure_reason,\n    \"fallback_required\": fallback_required,\n    \"provider_response_timeout_minutes\": response_timeout_minutes\n}\n\nreturn {\"json\": output}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -4560,
+        -1920
+      ],
+      "id": "ID",
+      "name": "Evaluate Simulated Provider Response"
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\noutput = {\n    **order,\n    \"failed_provider\": order.get(\"selected_provider\"),\n    \"provider_removed\": True\n}\n\nreturn {\"json\": output}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3904,
+        -2080
+      ],
+      "id": "ID",
+      "name": "Remove Failed Provider."
+    },
+    {
+      "parameters": {
+        "mode": "runOnceForEachItem",
+        "language": "pythonNative",
+        "pythonCode": "order = _item[\"json\"]\n\nfallback_providers = list(\n    order.get(\"fallback_providers\", [])\n)\n\nfailed_provider = (\n    order.get(\"failed_provider\")\n    or order.get(\"selected_provider\")\n    or {}\n)\n\nif isinstance(failed_provider, dict):\n    failed_provider_name = str(\n        failed_provider.get(\"provider_name\", \"\")\n    ).strip()\nelse:\n    failed_provider_name = str(\n        failed_provider\n    ).strip()\n\nselected_fallback = None\nremaining_fallbacks = []\n\nfor provider in fallback_providers:\n\n    if (\n        provider.get(\"provider_name\")\n        == failed_provider_name\n    ):\n        continue\n\n    if not provider.get(\"available\", False):\n        continue\n\n    if selected_fallback is None:\n        selected_fallback = provider\n    else:\n        remaining_fallbacks.append(provider)\n\nfallback_provider_found = (\n    selected_fallback is not None\n)\n\nprimary_failure_reason = str(\n    order.get(\n        \"primary_failure_reason\",\n        \"Primary provider failed.\"\n    )\n).strip().rstrip(\".\")\n\nif fallback_provider_found:\n    reassignment_failure_reason = \"\"\nelse:\n    reassignment_failure_reason = (\n        f\"{primary_failure_reason}. \"\n        \"No remaining eligible provider was available.\"\n    )\n\noutput = {\n    **order,\n    \"failed_provider\": failed_provider,\n    \"fallback_provider_found\": fallback_provider_found,\n    \"fallback_provider\": selected_fallback,\n    \"selected_provider\": (\n        selected_fallback\n        if fallback_provider_found\n        else order.get(\"selected_provider\")\n    ),\n    \"remaining_fallback_providers\": remaining_fallbacks,\n    \"reassignment_required\": True,\n    \"reassignment_failure_reason\": (\n        reassignment_failure_reason\n    )\n}\n\nreturn {\"json\": output}"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        -3904,
+        -1776
+      ],
+      "id": "ID",
+      "name": "Next Available Provider."
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "ID",
+              "leftValue": "={{ $json.fallback_provider_found }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        -3888,
+        -1520
+      ],
+      "id": "ID",
+      "name": "Was a Fallback Provider Found?"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "ID",
+          "mode": "list",
+          "cachedResultName": "greencart-provider-availability-issue"
+        },
+        "text": "=🚀DELIVERY ESCALATION  \nOrder ID: {{ $json.external_order_id }} \nStatus: {{ $json.final_status }} \nFailed Provider: {{ $json.failed_provider }} \nReason: {{ $json.reassignment_failure_reason }}\n\nRequired Action: {{ $json.operator_action }}  \nStatus: {{ $json.customer_internal_update }}\n",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.5,
+      "position": [
+        -3920,
+        -752
+      ],
+      "id": "ID",
+      "name": "Prepare Human Escalation.",
+      "webhookId": "WEBHOOK-ID",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "ID",
+          "name": "Slack OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "ID",
+          "mode": "list",
+          "cachedResultName": "ROUTING",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "external_order_id": "={{ $('Clean and Standardise Order').item.json.external_order_id }}",
+            "customer_name": "={{ $('Upsert Intake Record by External Order ID').item.json.customer_name }}",
+            "customer_email": "={{ $('Receive Customer Order').item.json['Customer Email'] }}",
+            "pickup_address": "={{ $('Receive Customer Order').item.json['Pickup Address'] }}",
+            "delivery_address": "={{ $('Receive Customer Order').item.json['Delivery Address'] }}",
+            "priority": "={{ $('Receive Customer Order').item.json.Priority }}",
+            "vehicle_required": "={{ $('Receive Customer Order').item.json['Vehicle Required'] }}",
+            "fragile_package": "={{ $('Receive Customer Order').item.json['Fragile Package'] }}",
+            "package_size": "={{ $('Receive Customer Order').item.json['Package SIze'] }}",
+            "delivery_time_window": "={{ $('Receive Customer Order').item.json['Delivery Time Window'] }}",
+            "special_delivery_instructions": "={{ $('Receive Customer Order').item.json['Special Delivery Instructions'] }}",
+            "customer_note": "={{ $('Receive Customer Order').item.json['Customer Notes'] }}",
+            "processed_at": "={{ $now }}",
+            "final_status": "={{ $('Business Outcome9').item.json.final_status }}",
+            "failed_provider": "={{ $('Business Outcome9').item.json.failed_provider }}",
+            "manual_intervention_required": "={{ $('Business Outcome9').item.json.manual_intervention_required }}",
+            "Next Action": "={{ $('Business Outcome9').item.json.operator_action }}",
+            "outcome_summary": "={{ $('Business Outcome9').item.json.outcome_summary }}",
+            "reassignment_required": "=True",
+            "reassignment_failure_reason": "={{ $('Business Outcome9').item.json.reassignment_failure_reason }}",
+            "fallback_provider": "=",
+            "estimated_eta_minutes": "=",
+            "reliability_score": "=",
+            "row_number": 0,
+            "exception_stage": "=Provider Reassignment",
+            "OOrder  Status": "={{ $('Next Available Provider.').item.json.order_status }}",
+            "provider_availability": "False",
+            "additional_cost": "={{ $('Business Outcome9').item.json.additional_cost }}",
+            "manual_minutes_saved": "={{ $('Business Outcome9').item.json.manual_minutes_saved }}",
+            "force_primary_failure": "={{ $('Clean and Standardise Order').item.json.force_primary_failure }}"
+          },
+          "matchingColumns": [
+            "external_order_id"
+          ],
+          "schema": [
+            {
+              "id": "external_order_id",
+              "displayName": "external_order_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_email",
+              "displayName": "customer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pickup_address",
+              "displayName": "pickup_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_address",
+              "displayName": "delivery_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "vehicle_required",
+              "displayName": "vehicle_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exception_stage",
+              "displayName": "exception_stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "package_size",
+              "displayName": "package_size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_time_window",
+              "displayName": "delivery_time_window",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fragile_package",
+              "displayName": "fragile_package",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "special_delivery_instructions",
+              "displayName": "special_delivery_instructions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_note",
+              "displayName": "customer_note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "OOrder  Status",
+              "displayName": "OOrder  Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "provider_availability",
+              "displayName": "provider_availability",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rejection_reason",
+              "displayName": "rejection_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_failure_reason",
+              "displayName": "reassignment_failure_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "selected_provider",
+              "displayName": "selected_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "failed_provider",
+              "displayName": "failed_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fallback_provider",
+              "displayName": "fallback_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "$ delivery_fee",
+              "displayName": "$ delivery_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estimated_eta_minutes",
+              "displayName": "estimated_eta_minutes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reliability_score",
+              "displayName": "reliability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_intervention_required",
+              "displayName": "manual_intervention_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_required",
+              "displayName": "reassignment_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "additional_cost",
+              "displayName": "additional_cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_minutes_saved",
+              "displayName": "manual_minutes_saved",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Next Action",
+              "displayName": "Next Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "outcome_summary",
+              "displayName": "outcome_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "force_primary_failure",
+              "displayName": "force_primary_failure",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "final_status",
+              "displayName": "final_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3936,
+        -512
+      ],
+      "id": "ID",
+      "name": "Update row in sheet.",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ID",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "ID",
+          "mode": "list",
+          "cachedResultName": "ROUTING",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Sheet1",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "customer_email": "={{ $('Clean and Standardise Order').item.json.customer_email }}",
+            "priority": "={{ $('Clean and Standardise Order').item.json.priority }}",
+            "delivery_address": "={{ $('Clean and Standardise Order').item.json.delivery_address }}",
+            "pickup_address": "={{ $('Clean and Standardise Order').item.json.pickup_address }}",
+            "vehicle_required": "={{ $('Clean and Standardise Order').item.json.vehicle_required }}",
+            "delivery_time_window": "={{ $('Clean and Standardise Order').item.json.delivery_time_window }}",
+            "fragile_package": "={{ $('Clean and Standardise Order').item.json.fragile_package }}",
+            "package_size": "={{ $('Clean and Standardise Order').item.json.package_size }}",
+            "customer_note": "={{ $('Clean and Standardise Order').item.json.customer_notes }}",
+            "special_delivery_instructions": "={{ $('Clean and Standardise Order').item.json.special_delivery_instructions }}",
+            "processed_at": "={{ $now }}",
+            "customer_name": "={{ $('Clean and Standardise Order').item.json.customer_name }}",
+            "external_order_id": "={{ $('Clean and Standardise Order').item.json.external_order_id }}",
+            "exception_stage": "={{ $('Business Outcome4').item.json.exception_stage }}",
+            "OOrder  Status": "={{ $('Business Outcome4').item.json.order_status }}",
+            "provider_availability": "={{ $('Business Outcome4').item.json.provider_availability }}",
+            "rejection_reason": "={{ $('Business Outcome4').item.json.primary_failure_reason }}",
+            "selected_provider": "={{ $('Business Outcome4').item.json.selected_provider }}",
+            "failed_provider": "={{ $('Was a Fallback Provider Found?').item.json.failed_provider.provider_name }}",
+            "fallback_provider": "={{ $('Was a Fallback Provider Found?').item.json.fallback_providers[0].provider_name }}",
+            "$ delivery_fee": "={{ $('Business Outcome4').item.json.selected_provider_fee }}",
+            "estimated_eta_minutes": "={{ $('Was a Fallback Provider Found?').item.json.selected_provider.eta_minutes }}",
+            "reliability_score": "={{ $('Was a Fallback Provider Found?').item.json.selected_provider.reliability_score }}",
+            "additional_cost": "={{ $('Business Outcome4').item.json.additional_cost }}",
+            "manual_minutes_saved": "={{ $('Business Outcome4').item.json.manual_minutes_saved }}",
+            "outcome_summary": "={{ $('Business Outcome4').item.json.outcome_summary }}",
+            "reassignment_required": "={{ $('Was a Fallback Provider Found?').item.json.reassignment_required }}",
+            "manual_intervention_required": "={{ $('Business Outcome4').item.json.manual_intervention_required }}",
+            "force_primary_failure": "={{ $('Clean and Standardise Order').item.json.force_primary_failure }}",
+            "final_status": "={{ $('Business Outcome4').item.json.final_status }}",
+            "Next Action": "={{ $('Business Outcome4').item.json['Next Action'] }}",
+            "row_number": 0
+          },
+          "matchingColumns": [
+            "external_order_id"
+          ],
+          "schema": [
+            {
+              "id": "external_order_id",
+              "displayName": "external_order_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_email",
+              "displayName": "customer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pickup_address",
+              "displayName": "pickup_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_address",
+              "displayName": "delivery_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "vehicle_required",
+              "displayName": "vehicle_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exception_stage",
+              "displayName": "exception_stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "package_size",
+              "displayName": "package_size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_time_window",
+              "displayName": "delivery_time_window",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fragile_package",
+              "displayName": "fragile_package",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "special_delivery_instructions",
+              "displayName": "special_delivery_instructions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_note",
+              "displayName": "customer_note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "OOrder  Status",
+              "displayName": "OOrder  Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "provider_availability",
+              "displayName": "provider_availability",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rejection_reason",
+              "displayName": "rejection_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_failure_reason",
+              "displayName": "reassignment_failure_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "selected_provider",
+              "displayName": "selected_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "failed_provider",
+              "displayName": "failed_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fallback_provider",
+              "displayName": "fallback_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "$ delivery_fee",
+              "displayName": "$ delivery_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estimated_eta_minutes",
+              "displayName": "estimated_eta_minutes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reliability_score",
+              "displayName": "reliability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_intervention_required",
+              "displayName": "manual_intervention_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_required",
+              "displayName": "reassignment_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "additional_cost",
+              "displayName": "additional_cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_minutes_saved",
+              "displayName": "manual_minutes_saved",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Next Action",
+              "displayName": "Next Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "outcome_summary",
+              "displayName": "outcome_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "force_primary_failure",
+              "displayName": "force_primary_failure",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "final_status",
+              "displayName": "final_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -3360,
+        -1056
+      ],
+      "id": "ID",
+      "name": "Update row in sheet1",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ID",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "documentId": {
+          "__rl": true,
+          "value": "=ID",
+          "mode": "id"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "ROUTING",
+          "cachedResultUrl": "REDACTED_SHEET_URL"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "external_order_id": "={{ $('Prepare Human Escalation').item.json.external_order_id }}",
+            "customer_name": "={{ $('Receive Customer Order').item.json['Customer Name'] }}",
+            "customer_email": "={{ $('Receive Customer Order').item.json['Customer Email'] }}",
+            "pickup_address": "={{ $('Receive Customer Order').item.json['Pickup Address'] }}",
+            "delivery_address": "={{ $('Receive Customer Order').item.json['Delivery Address'] }}",
+            "priority": "={{ $('Receive Customer Order').item.json.Priority }}",
+            "vehicle_required": "={{ $('Receive Customer Order').item.json['Vehicle Required'] }}",
+            "package_size": "={{ $('Receive Customer Order').item.json['Package SIze'] }}",
+            "delivery_time_window": "={{ $('Receive Customer Order').item.json['Delivery Time Window'] }}",
+            "fragile_package": "={{ $('Receive Customer Order').item.json['Fragile Package'] }}",
+            "special_delivery_instructions": "={{ $('Receive Customer Order').item.json['Special Delivery Instructions'] }}",
+            "customer_note": "={{ $('Receive Customer Order').item.json['Customer Notes'] }} ",
+            "processed_at": "={{ $('Receive Customer Order').item.json.submittedAt }}",
+            "exception_stage": "={{ $('Prepare Human Escalation').item.json.exception_stage }}",
+            "outcome_summary": "={{ $('Prepare Human Escalation').item.json.customer_internal_update }}",
+            "rejection_reason": "={{ $('Prepare Human Escalation').item.json.rejected_reason }}",
+            "Next Action": "={{ $('Prepare Human Escalation').item.json.operation_action }}",
+            "manual_intervention_required": "={{ $('Prepare Human Escalation').item.json.manual_intervention_required }}",
+            "final_status": "={{ $('Prepare Human Escalation').item.json.final_status }}",
+            "row_number": 0,
+            "OOrder  Status": "={{ $('Prepare Human Escalation').item.json.order_status }}",
+            "manual_minutes_saved": "={{ $('Business Outcome7').item.json.manual_minutes_saved }}",
+            "additional_cost": "={{ $('Business Outcome7').item.json.additional_cost }}",
+            "force_primary_failure": "={{ $('Clean and Standardise Order').item.json.force_primary_failure }}",
+            "provider_availability": "={{ $('Business Outcome7').item.json.rejected_reason }}"
+          },
+          "matchingColumns": [
+            "external_order_id"
+          ],
+          "schema": [
+            {
+              "id": "external_order_id",
+              "displayName": "external_order_id",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_name",
+              "displayName": "customer_name",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_email",
+              "displayName": "customer_email",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "pickup_address",
+              "displayName": "pickup_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_address",
+              "displayName": "delivery_address",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "priority",
+              "displayName": "priority",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "vehicle_required",
+              "displayName": "vehicle_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "exception_stage",
+              "displayName": "exception_stage",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "package_size",
+              "displayName": "package_size",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "delivery_time_window",
+              "displayName": "delivery_time_window",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "fragile_package",
+              "displayName": "fragile_package",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "special_delivery_instructions",
+              "displayName": "special_delivery_instructions",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "customer_note",
+              "displayName": "customer_note",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "OOrder  Status",
+              "displayName": "OOrder  Status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "provider_availability",
+              "displayName": "provider_availability",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "rejection_reason",
+              "displayName": "rejection_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_failure_reason",
+              "displayName": "reassignment_failure_reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "selected_provider",
+              "displayName": "selected_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "failed_provider",
+              "displayName": "failed_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "fallback_provider",
+              "displayName": "fallback_provider",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "$ delivery_fee",
+              "displayName": "$ delivery_fee",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "estimated_eta_minutes",
+              "displayName": "estimated_eta_minutes",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reliability_score",
+              "displayName": "reliability_score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "manual_intervention_required",
+              "displayName": "manual_intervention_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reassignment_required",
+              "displayName": "reassignment_required",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "additional_cost",
+              "displayName": "additional_cost",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "manual_minutes_saved",
+              "displayName": "manual_minutes_saved",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "Next Action",
+              "displayName": "Next Action",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "outcome_summary",
+              "displayName": "outcome_summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "force_primary_failure",
+              "displayName": "force_primary_failure",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "final_status",
+              "displayName": "final_status",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "processed_at",
+              "displayName": "processed_at",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "row_number",
+              "displayName": "row_number",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "readOnly": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.7,
+      "position": [
+        -5296,
+        -1136
+      ],
+      "id": "ID",
+      "name": "Update row in sheet2",
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "ID",
+          "name": "Google Sheets OAuth2 API"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Receive Customer Order": {
+      "main": [
+        [
+          {
+            "node": "Clean and Standardise Order",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Clean and Standardise Order": {
+      "main": [
+        [
+          {
+            "node": "Upsert Intake Record by External Order ID",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Human Escalation": {
+      "main": [
+        [
+          {
+            "node": "Business Outcome7",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Primary Provider Assigned": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Fallback Provider Assigned": {
+      "main": [
+        [
+          {
+            "node": "Business Outcome4",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message": {
+      "main": [
+        [
+          {
+            "node": "Business Outcome10",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Send a message1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Needs Attention1": {
+      "main": [
+        [
+          {
+            "node": "Business Outcome8",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Human Escalation Order Validation1": {
+      "main": [
+        [
+          {
+            "node": "Append or update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Determine Dispatch Strategy1": {
+      "main": [
+        [
+          {
+            "node": "Generate Mock Provider Quotes",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Human Escalation Unavailable Provider1": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Human Escalation3": {
+      "main": [
+        [
+          {
+            "node": "Business Outcome9",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Business Outcome4": {
+      "main": [
+        [
+          {
+            "node": "Send a message1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Business Outcome7": {
+      "main": [
+        [
+          {
+            "node": "Human Escalation Unavailable Provider1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Business Outcome8": {
+      "main": [
+        [
+          {
+            "node": "Human Escalation Order Validation1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Business Outcome9": {
+      "main": [
+        [
+          {
+            "node": "Prepare Human Escalation.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Business Outcome10": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Upsert Intake Record by External Order ID": {
+      "main": [
+        [
+          {
+            "node": "Restore Standardised Order After Intake Upsert",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Restore Standardised Order After Intake Upsert": {
+      "main": [
+        [
+          {
+            "node": "Validate Required Order Data2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate Required Order Data2": {
+      "main": [
+        [
+          {
+            "node": "Did Validation Pass?2",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Did Validation Pass?2": {
+      "main": [
+        [
+          {
+            "node": "Determine Dispatch Strategy1",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Needs Attention1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Generate Mock Provider Quotes": {
+      "main": [
+        [
+          {
+            "node": "Filter Eligibile Providers",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Filter Eligibile Providers": {
+      "main": [
+        [
+          {
+            "node": "Is an Eligibile Provider Available?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is an Eligibile Provider Available?": {
+      "main": [
+        [
+          {
+            "node": "Select Best Provider",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Human Escalation",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Select Best Provider": {
+      "main": [
+        [
+          {
+            "node": "Simulate Primary Provider Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Simulate Primary Provider Response": {
+      "main": [
+        [
+          {
+            "node": "Evaluate Simulated Provider Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Route Simulated Provider Response": {
+      "main": [
+        [
+          {
+            "node": "Primary Provider Assigned",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Remove Failed Provider.",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Remove Failed Provider.",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Remove Failed Provider.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Evaluate Simulated Provider Response": {
+      "main": [
+        [
+          {
+            "node": "Route Simulated Provider Response",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Remove Failed Provider.": {
+      "main": [
+        [
+          {
+            "node": "Next Available Provider.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Next Available Provider.": {
+      "main": [
+        [
+          {
+            "node": "Was a Fallback Provider Found?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Was a Fallback Provider Found?": {
+      "main": [
+        [
+          {
+            "node": "Fallback Provider Assigned",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Prepare Human Escalation3",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Prepare Human Escalation.": {
+      "main": [
+        [
+          {
+            "node": "Update row in sheet.",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "ID",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "ID"
+  },
+  "nodeGroups": [],
+  "id": "ID",
+  "tags": []
+}

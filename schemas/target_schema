@@ -1,0 +1,97 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Delivery Orchestration Order Input",
+  "description": "Schema for customer delivery requests submitted to the Greencart.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "external_order_id",
+    "customer_name",
+    "customer_email",
+    "pickup_address",
+    "delivery_address",
+    "priority",
+    "vehicle_required",
+    "package_size",
+    "delivery_time_window",
+    "fragile_package"
+    "special_delivery_instructions"
+  ],
+  "properties": {
+    "external_order_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Customer supplied order identifier."
+    },
+    "customer_name": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Name of the customer placing the delivery request."
+    },
+    "customer_email": {
+      "type": "string",
+      "format": "email",
+      "description": "Customer email used for delivery notifications."
+    },
+    "pickup_address": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Pickup location supplied by the customer."
+    },
+    "delivery_address": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Delivery destination supplied by the customer."
+    },
+    "priority": {
+      "type": "string",
+      "enum": [
+        "Standard",
+        "Express",
+        "Urgent"
+      ],
+      "description": "Requested delivery priority."
+    },
+    "vehicle_required": {
+      "type": "string",
+      "enum": [
+        "Bike",
+        "Car",
+        "Van",
+        "Truck",
+        "Refrigerated Van"
+      ],
+      "description": "Vehicle type required to fulfil the delivery."
+    },
+    "package_size": {
+      "type": "string",
+      "enum": [
+        "Small",
+        "Medium",
+        "Large"
+      ],
+      "description": "Size of the package to be delivered."
+    },
+    "delivery_time_window": {
+      "type": "string",
+      "enum": [
+        "Morning",
+        "Afternoon",
+        "Evening"
+      ],
+      "description": "Preferred delivery time window."
+    },
+    "fragile_package": {
+      "type": "boolean",
+      "description": "Indicates whether the package requires fragile handling."
+    },
+    "special_delivery_instructions": {
+      "type": "string",
+      "description": "Delivery instructions supplied by the customer."
+    },
+    "customer_note": {
+      "type": "string",
+      "description": "Optional customer note attached to the delivery request."
+    }
+  }
+}

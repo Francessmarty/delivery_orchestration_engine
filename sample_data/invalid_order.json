@@ -1,0 +1,15 @@
+
+{
+  "external_order_id": "QA-INVALID-001",
+  "customer_name": "QA Invalid Order",
+  "customer_email": "qa.invalid@example.com",
+  "pickup_address": "12 Test Road",
+  "delivery_address": "Lekki Ajah",
+  "priority": "Urgent",
+  "vehicle_required": "Truck",
+  "package_size": "Medium",
+  "delivery_time_window": "Afternoon",
+  "fragile_package": "Yes",
+  "special_delivery_instructions": "Call before arrival",
+  "customer_note": "Invalid Path Test"
+}

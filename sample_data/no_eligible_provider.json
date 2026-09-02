@@ -1,0 +1,15 @@
+
+{
+  "external_order_id": "QA-NOPROVIDER-OO1",
+  "customer_name": "QA Unsupported Vehicle Test",
+  "customer_email": "qa.noprovider@texample.com",
+  "pickup_address": "12 Test Road",
+  "delivery_address": "25 Demo Street",
+  "priority": "Express",
+  "vehicle_required": "Refrigerated Van",
+  "package_size": "Medium",
+  "delivery_time_window": "Morning",
+  "fragile_package": "Yes",
+  "special_delivery_instructions": "Call before arrival",
+  "customer_note": "Unsupported Vehicle Required"
+}

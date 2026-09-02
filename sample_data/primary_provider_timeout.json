@@ -1,0 +1,15 @@
+
+{
+  "external_order_id": "QA-TIMEOUT-001",
+  "customer_name": "QA Timeout Test",
+  "customer_email": "qa.timeout@example.com",
+  "pickup_address": "12 Test Road",
+  "delivery_address": "25 Demo Street",
+  "priority": "Standard",
+  "vehicle_required": "Car",
+  "package_size": "Small",
+  "delivery_time_window": "Morning",
+  "fragile_package": "No",
+  "special_delivery_instructions": "Leave at reception",
+  "customer_note": "Primary Provider Timeout"
+}
