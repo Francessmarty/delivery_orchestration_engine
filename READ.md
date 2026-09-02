@@ -198,7 +198,7 @@ It tracks:
 * Reassignment requirements
 * Automation rate
 
-![KPI Dashboard](screenshots/03-routing-kpi-dashboard.png)
+![KPI Dashboard](screenshots/13-routing-kpi-dashboard.png)
 
 # Technology Stack
 
